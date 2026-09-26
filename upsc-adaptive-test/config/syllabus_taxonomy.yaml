@@ -1,0 +1,64 @@
+# Topic taxonomy used to tag every extracted question / content chunk.
+# This mirrors the official UPSC syllabus structure. IDs are stable
+# strings used elsewhere (question tags, current-affairs tags).
+
+prelims:
+  gs_paper_1:
+    - id: polity
+      name: Indian Polity and Governance
+    - id: history
+      name: History of India and Indian National Movement
+    - id: geography
+      name: Geography of India and the World
+    - id: economy
+      name: Economic and Social Development
+    - id: environment
+      name: Environmental Ecology, Biodiversity, Climate Change
+    - id: science_tech
+      name: General Science
+    - id: current_affairs
+      name: Current Events of National and International Importance
+  csat:
+    - id: comprehension
+      name: Comprehension
+    - id: reasoning
+      name: Logical Reasoning and Analytical Ability
+    - id: quant
+      name: Basic Numeracy
+
+mains:
+  gs1:
+    - id: culture
+      name: Indian Heritage and Culture
+    - id: history_world
+      name: History of the World
+    - id: history_india
+      name: History and Society of India
+    - id: geography_mains
+      name: Geography (Distribution of Resources, Physical Geography)
+  gs2:
+    - id: constitution
+      name: Indian Constitution
+    - id: governance
+      name: Governance, Transparency, Accountability
+    - id: social_justice
+      name: Social Justice
+    - id: international_relations
+      name: International Relations
+  gs3:
+    - id: economy_mains
+      name: Indian Economy and Planning
+    - id: agriculture
+      name: Agriculture
+    - id: science_tech_mains
+      name: Science and Technology
+    - id: environment_mains
+      name: Environment and Disaster Management
+    - id: security
+      name: Internal Security
+  gs4:
+    - id: ethics
+      name: Ethics, Integrity and Aptitude
+  essay:
+    - id: essay
+      name: Essay

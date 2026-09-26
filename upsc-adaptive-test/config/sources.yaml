@@ -1,0 +1,65 @@
+# Source registry for the UPSC adaptive test data pipeline.
+# confidence: verified | unverified
+#   verified   -> official govt/NCERT source, used as ground truth
+#   unverified -> third-party/coaching compilation, used only as extra
+#                 practice pool, never as sole source of truth
+
+sources:
+  - id: upsc_official
+    name: UPSC official website
+    url: https://upsc.gov.in
+    type: [syllabus, question_paper, answer_key]
+    confidence: verified
+    notes: Prelims + Mains papers, official answer keys, syllabus PDFs.
+
+  - id: ncert
+    name: NCERT textbooks (classes 6-12)
+    url: https://ncert.nic.in
+    type: [reference_text]
+    confidence: verified
+    notes: History, Geography, Polity, Economy, Science base content.
+
+  - id: pib
+    name: Press Information Bureau
+    url: https://pib.gov.in
+    type: [current_affairs]
+    confidence: verified
+    ingestion: rss
+
+  - id: prs_india
+    name: PRS Legislative Research
+    url: https://prsindia.org
+    type: [current_affairs, policy_analysis]
+    confidence: verified
+    ingestion: rss
+
+  - id: upsc_questions_compiled
+    name: Uploaded UPSC_Questions.pdf (topic-wise compilation)
+    local_path: data/raw/unverified/UPSC_Questions.pdf
+    type: [question_paper]
+    confidence: unverified
+    notes: >
+      595 MCQs across Polity/Economy/Geography/Environment/History.
+      No year/source citation per question. Must be cross-checked
+      against upsc_official before being marked verified. Use as
+      bonus practice pool only.
+
+  - id: upsc_answer_key_orphan
+    name: Uploaded UPSC_Answer_Key.pdf
+    local_path: data/raw/unverified/UPSC_Answer_Key.pdf
+    type: [answer_key]
+    confidence: unverified
+    notes: >
+      250 answers, no matching question paper attached. Unusable
+      until paired with a source question set.
+
+  - id: ssc_cgl_2024
+    name: SSC CGL Tier 1 (Sept 2024)
+    local_path: data/raw/unverified/SSC-CGL_2024.pdf
+    type: [question_paper]
+    confidence: excluded
+    notes: Different exam (SSC, not UPSC). Excluded from ingestion by default.
+
+excluded_sources:
+  - Coaching material (Vision IAS, Drishti IAS, etc.) — copyright + no
+    reliability guarantee. Not ingested.

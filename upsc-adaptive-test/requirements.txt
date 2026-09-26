@@ -1,0 +1,6 @@
+feedparser>=6.0
+PyYAML>=6.0
+
+# PDF text extraction uses the `pdftotext` CLI (poppler-utils) instead
+# of a Python library, to avoid native-extension issues:
+#   apt-get install poppler-utils   /   brew install poppler

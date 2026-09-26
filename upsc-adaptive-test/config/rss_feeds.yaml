@@ -1,0 +1,23 @@
+# RSS feeds for current-affairs ingestion.
+# Only verified government / public-interest sources — no paywalled
+# news reproduction (copyright). Store summary + link + tags, not full text.
+
+feeds:
+  - id: pib_all
+    name: PIB - All Ministries
+    url: https://pib.gov.in/RssMain.aspx?ModId=6&Lang=1&Regid=3
+    default_topic: current_affairs
+
+  - id: pib_economy
+    name: PIB - Finance Ministry
+    url: https://pib.gov.in/RssMain.aspx?ModId=6&Lang=1&Regid=7
+    default_topic: economy
+
+  - id: prs_bills
+    name: PRS India - Bill Track
+    url: https://prsindia.org/rss/billtrack
+    default_topic: governance
+
+# Note: verify each feed URL resolves before relying on it — govt RSS
+# endpoints change occasionally. Fall back to scraping the listing page
+# if a feed 404s.
