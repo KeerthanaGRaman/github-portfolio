@@ -8,11 +8,46 @@ Intended to run on a schedule (daily) via cron / GitHub Actions.
 """
 import argparse
 import json
+import re
+import subprocess
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 
 import feedparser
 import yaml
+
+# Some govt feeds (PIB in particular) reset the TLS connection roughly
+# 1 in 3 attempts, server-side. Fetch raw bytes via curl with retries
+# rather than relying on feedparser's own (retry-less) HTTP client.
+MAX_RETRIES = 4
+RETRY_DELAY_SECONDS = 3
+
+
+def fetch_bytes(url: str) -> bytes | None:
+    for attempt in range(1, MAX_RETRIES + 1):
+        result = subprocess.run(
+            ["curl", "-sSL", "--max-time", "20", url],
+            capture_output=True,
+        )
+        if result.returncode == 0 and result.stdout:
+            return result.stdout
+        if attempt < MAX_RETRIES:
+            time.sleep(RETRY_DELAY_SECONDS)
+    return None
+
+
+def detect_script(text: str) -> str:
+    """Rough language-script tag: most govt feeds mix Hindi/English
+    items regardless of any Lang param, so we tag per-item rather than
+    trusting the feed's declared language."""
+    devanagari = len(re.findall(r"[ऀ-ॿ]", text))
+    latin = len(re.findall(r"[A-Za-z]", text))
+    if devanagari > latin:
+        return "hindi"
+    if latin > 0:
+        return "english"
+    return "unknown"
 
 
 def load_seen_links(out_path: Path) -> set[str]:
@@ -36,8 +71,13 @@ def fetch(config_path: str, out_path: str):
 
     new_items = []
     for feed_cfg in config["feeds"]:
-        parsed = feedparser.parse(feed_cfg["url"])
-        if parsed.bozo:
+        raw = fetch_bytes(feed_cfg["url"])
+        if raw is None:
+            print(f"WARN: could not reach feed {feed_cfg['id']} ({feed_cfg['url']}) after {MAX_RETRIES} attempts")
+            continue
+
+        parsed = feedparser.parse(raw)
+        if parsed.bozo and not parsed.entries:
             print(f"WARN: could not parse feed {feed_cfg['id']} ({feed_cfg['url']}): {parsed.bozo_exception}")
             continue
 
@@ -45,13 +85,15 @@ def fetch(config_path: str, out_path: str):
             link = entry.get("link")
             if not link or link in seen:
                 continue
+            title = entry.get("title", "")
             new_items.append({
                 "feed_id": feed_cfg["id"],
                 "topic": feed_cfg.get("default_topic", "current_affairs"),
-                "title": entry.get("title", ""),
+                "title": title,
                 "summary": entry.get("summary", ""),
                 "link": link,
                 "published": entry.get("published", ""),
+                "language": detect_script(title),
                 "fetched_at": datetime.now(timezone.utc).isoformat(),
                 "confidence": "verified",
             })

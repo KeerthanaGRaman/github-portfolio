@@ -1,23 +1,25 @@
 # RSS feeds for current-affairs ingestion.
-# Only verified government / public-interest sources — no paywalled
+# Only verified government / public-interest sources - no paywalled
 # news reproduction (copyright). Store summary + link + tags, not full text.
 
 feeds:
-  - id: pib_all
-    name: PIB - All Ministries
-    url: https://pib.gov.in/RssMain.aspx?ModId=6&Lang=1&Regid=3
+  - id: pib_delhi
+    name: PIB - Delhi (national press releases)
+    url: "https://pib.gov.in/RssMain.aspx?ModId=6&Lang=1&Regid=3"
     default_topic: current_affairs
+    notes: >
+      Confirmed working (verified by curl, Sept 2026). Despite Lang=1,
+      items are frequently in Hindi (PIB's official feed mixes
+      languages by release, independent of the Lang param - a known
+      quirk, also noted by third-party PIB-RSS tools). fetch_rss.py
+      tags each item's detected script so downstream consumers can
+      filter to English-only if needed.
+    reliability: flaky
+    notes_reliability: >
+      Connection resets on the TLS handshake roughly 1 in 3 attempts
+      (server-side, not our proxy). fetch_rss.py retries with backoff.
 
-  - id: pib_economy
-    name: PIB - Finance Ministry
-    url: https://pib.gov.in/RssMain.aspx?ModId=6&Lang=1&Regid=7
-    default_topic: economy
-
-  - id: prs_bills
-    name: PRS India - Bill Track
-    url: https://prsindia.org/rss/billtrack
-    default_topic: governance
-
-# Note: verify each feed URL resolves before relying on it — govt RSS
-# endpoints change occasionally. Fall back to scraping the listing page
-# if a feed 404s.
+# PRS India has no RSS feed (checked /feed, /rss.xml, /rss, /feed.xml,
+# /bill-track/rss - all 404 as of Sept 2026). Bill-tracking content
+# would need a scraper against their bill-track listing pages instead -
+# left as a follow-up, not wired into fetch_rss.py.
