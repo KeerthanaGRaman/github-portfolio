@@ -69,10 +69,16 @@ copyright + reliability).
    in the same `--- page N ---` format `pdf_to_text.py` uses so
    downstream parsing doesn't care which one produced the text.
    Validated against a synthetic image-only PDF (real text rendered to
-   an image, then saved with no text layer): recovered the content
-   correctly with one realistic OCR error (`(b)` misread as `(6)`/`(6b)`)
-   - a genuine reminder that OCR quality depends on scan clarity and
-   should be spot-checked, not trusted blindly like a real text layer.
+   an image, then saved with no text layer): Tesseract recovered the
+   content but misread `(b)` as `(6)`/`(6b)` twice - classic OCR
+   character-shape confusion. Re-read the same image with a
+   vision-capable model instead: 100% correct, no `(b)`/`(6)` errors -
+   vision models use surrounding context ("this is an (a)(b)(c)(d)
+   list") rather than matching character shapes in isolation. Tesseract
+   stays the automated default (cheap, scriptable, no model call per
+   page); a vision-model read is worth doing by hand on anything
+   Tesseract garbles, especially in the "unverified" question-answer
+   space where a misread letter silently flips a correct answer choice.
 
 ## Known blockers
 
