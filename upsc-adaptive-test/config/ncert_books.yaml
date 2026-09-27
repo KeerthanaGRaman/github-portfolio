@@ -1,6 +1,8 @@
-# NCERT textbook registry for UPSC-relevant subjects (English medium),
-# classes 6-12. Codes reverse-engineered from the book-selector JS on
-# https://ncert.nic.in/textbook.php (the "tbook" dropdown values).
+# NCERT textbook registry for UPSC-relevant subjects, classes 6-12.
+# English medium only (decided Sept 2026 - Hindi is in scope for
+# current-affairs/RSS content, but not for NCERT). Codes reverse-
+# engineered from the book-selector JS on https://ncert.nic.in/textbook.php
+# (the "tbook" dropdown values).
 #
 # PDF URL pattern for chapter N of book code <code>:
 #   https://ncert.nic.in/textbook/pdf/<code><NN>.pdf   (NN = 01, 02, ...)

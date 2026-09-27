@@ -11,9 +11,10 @@ feeds:
       Confirmed working (verified by curl, Sept 2026). Despite Lang=1,
       items are frequently in Hindi (PIB's official feed mixes
       languages by release, independent of the Lang param - a known
-      quirk, also noted by third-party PIB-RSS tools). fetch_rss.py
-      tags each item's detected script so downstream consumers can
-      filter to English-only if needed.
+      quirk, also noted by third-party PIB-RSS tools). Both languages
+      are kept (app scope includes Hindi content) - fetch_rss.py tags
+      each item's detected script (hindi/english) so the app can
+      filter or route by language downstream if it needs to.
     reliability: flaky
     notes_reliability: >
       Connection resets on the TLS handshake roughly 1 in 3 attempts

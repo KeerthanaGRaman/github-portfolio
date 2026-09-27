@@ -8,21 +8,27 @@ Data ingestion & extraction for an adaptive UPSC Prelims/Mains practice test.
 config/
   sources.yaml            source registry + confidence (verified/unverified/excluded)
   syllabus_taxonomy.yaml  topic tree used to tag every question/content chunk
+  ncert_books.yaml        NCERT book-code registry (classes 6-12)
   rss_feeds.yaml          current-affairs RSS feed list
 data/
-  raw/                    downloaded source files (gitignored, PDFs not committed)
-  processed/              extracted structured JSON/JSONL
+  raw/                    downloaded/intermediate files (gitignored - never committed)
+  processed/              compiled, tagged corpora (committed)
+    syllabus/             NCERT corpus (ncert_corpus.jsonl) + fetch manifest
+    questions/            parsed MCQ banks
+    current_affairs/      RSS feed items (feed_items.jsonl)
 scripts/
+  ingest/fetch_ncert.py   downloads + extracts NCERT chapter PDFs -> text
   ingest/fetch_rss.py     pulls current-affairs RSS feeds -> jsonl
-  extract/pdf_to_text.py  PDF -> plain text
-  extract/parse_questions.py  text -> structured MCQ JSON, tagged by topic
-  extract/merge_answer_key.py merge a bare answer key into parsed questions
+  extract/pdf_to_text.py  PDF -> plain text (pdftotext)
+  extract/parse_questions.py    text -> structured MCQ JSON, tagged by topic
+  extract/merge_answer_key.py   merge a bare answer key into parsed questions
+  extract/build_ncert_corpus.py compile fetched NCERT chapters -> committed corpus
 ```
 
 ## Confidence model
 
 Every record carries a `confidence` field:
-- `verified` — official govt (UPSC, PIB, PRS) or NCERT source. Ground truth.
+- `verified` — official govt (UPSC, PIB) or NCERT source. Ground truth.
 - `unverified` — third-party compilation. Used only as a bonus practice
   pool, flagged in the UI, never treated as authoritative.
 
@@ -30,21 +36,43 @@ See `config/sources.yaml` for the full registry, including sources
 deliberately excluded (SSC CGL paper — wrong exam; coaching material —
 copyright + reliability).
 
+## Language scope
+
+- **NCERT**: English medium only.
+- **Current affairs (PIB)**: both English and Hindi are kept — the app
+  uses both. PIB's feed mixes languages per release regardless of any
+  `Lang` param, so `fetch_rss.py` tags each item's detected script
+  (`hindi`/`english`) rather than trusting the feed to separate them.
+
 ## Pipeline (current state)
 
-1. `pdf_to_text.py` — extract raw text from a PDF.
-2. `parse_questions.py` — split text into numbered questions + options,
-   tag each with a syllabus topic id from `syllabus_taxonomy.yaml`.
-3. `merge_answer_key.py` — attach answers once a key is confirmed to
-   match a given question set.
-4. `fetch_rss.py` — daily pull of PIB/PRS feeds into
-   `data/processed/current_affairs/feed_items.jsonl`.
+1. `fetch_ncert.py` — downloads each NCERT chapter PDF, extracts text
+   via `pdftotext`, discards the PDF (chapters run 5-15MB with images).
+2. `build_ncert_corpus.py` — compiles fetched chapters + manifest into
+   the committed `data/processed/syllabus/ncert_corpus.jsonl`.
+3. `pdf_to_text.py` / `parse_questions.py` / `merge_answer_key.py` —
+   extract and tag MCQs from uploaded question-paper PDFs.
+4. `fetch_rss.py` — pull of PIB current-affairs feed into
+   `data/processed/current_affairs/feed_items.jsonl` (dedup by link,
+   retries on PIB's flaky TLS resets).
+
+## Known blockers
+
+- **upsc.gov.in** is unreachable from this environment — the server
+  resets the TLS connection for every request (a server-side block on
+  this IP range, not a local network-policy issue). Official UPSC
+  syllabus/papers/answer-keys still need to come in via manual upload.
+- **PRS India** has no RSS feed (`/feed`, `/rss.xml`, `/rss`,
+  `/feed.xml`, `/bill-track/rss` all 404 as of Sept 2026). Bill-track
+  content would need a page scraper instead — not yet built.
 
 ## Next steps
 
-- Download official UPSC syllabus + Prelims/Mains papers (2013+) from
-  upsc.gov.in into `data/raw/upsc_official/`.
-- Download NCERT PDFs (6-12, relevant subjects) into `data/raw/ncert/`.
+- Get official UPSC syllabus + Prelims/Mains papers (2013+) via manual
+  upload into `data/raw/upsc_official/`, then run them through the
+  question-parsing pipeline.
 - Cross-check `UPSC_Questions.pdf` (unverified) against official papers
   to promote confirmed matches to `verified`.
-- Wire `fetch_rss.py` into a scheduled job (cron / GitHub Actions).
+- Build a PRS bill-track scraper, or find an alternative feed.
+- Wire `fetch_rss.py` (and eventually `fetch_ncert.py`, one-off) into a
+  scheduled job (cron / GitHub Actions).
