@@ -21,9 +21,11 @@ scripts/
   ingest/fetch_rss.py     pulls current-affairs RSS feeds -> jsonl
   ingest/scrape_prs.py    scrapes PRS's Bills Track listing (no RSS exists) -> jsonl
   extract/pdf_to_text.py  PDF -> plain text (pdftotext)
+  extract/ocr_pdf.py      OCR fallback for scanned/image-only PDFs (pdftoppm + tesseract)
   extract/parse_questions.py    text -> structured MCQ JSON, tagged by topic
   extract/merge_answer_key.py   merge a bare answer key into parsed questions
   extract/build_ncert_corpus.py compile fetched NCERT chapters -> committed corpus
+  extract/extract_images.py     pull real content images out of a PDF, filtering boilerplate
 ```
 
 ## Confidence model
@@ -61,6 +63,16 @@ copyright + reliability).
    (deduped by link, re-run updates a bill's status in place). Respects
    `robots.txt`'s `Crawl-delay: 10`; stores only title/status/link, not
    PRS's own bill-summary text.
+6. `ocr_pdf.py` — fallback for when `pdf_to_text.py` comes back empty
+   (a scanned/photographed page has no real text layer). Renders each
+   page to a PNG (`pdftoppm`, 300 DPI) and runs Tesseract on it, output
+   in the same `--- page N ---` format `pdf_to_text.py` uses so
+   downstream parsing doesn't care which one produced the text.
+   Validated against a synthetic image-only PDF (real text rendered to
+   an image, then saved with no text layer): recovered the content
+   correctly with one realistic OCR error (`(b)` misread as `(6)`/`(6b)`)
+   - a genuine reminder that OCR quality depends on scan clarity and
+   should be spot-checked, not trusted blindly like a real text layer.
 
 ## Known blockers
 
@@ -74,7 +86,8 @@ copyright + reliability).
 - Get official UPSC syllabus + Prelims/Mains papers (2013+) via manual
   upload into `data/raw/upsc_official/`, then run them through the
   question-parsing pipeline.
-- Cross-check `UPSC_Questions.pdf` (unverified) against official papers
-  to promote confirmed matches to `verified`.
+- Cross-check `UPSC_Questions.pdf` (answers now merged in, still
+  `unverified`) against official papers to promote confirmed matches
+  to `verified`.
 - Wire `fetch_rss.py` and `scrape_prs.py` (and eventually
   `fetch_ncert.py`, one-off) into a scheduled job (cron / GitHub Actions).
