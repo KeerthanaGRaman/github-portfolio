@@ -55,9 +55,13 @@ sources:
       coaching sources. Stays confidence=unverified; must still be
       cross-checked against upsc_official before being trusted as fact.
     notes: >
-      595 MCQs across Polity/Economy/Geography/Environment/History.
-      No year/source citation per question. Use as bonus practice
-      pool only.
+      248 MCQs across Polity/Economy/Geography/Environment/History,
+      globally numbered 1-250 across topics (polity 1-50, economy
+      51-100, geography 101-140, environment 141-200, history 201-250).
+      Answers merged in from upsc_answer_key_orphan (Sept 2026) - see
+      that entry for why the match is trustworthy. No year/source
+      citation per question, so still bonus practice pool only, not
+      promoted to verified.
 
   - id: upsc_answer_key_orphan
     name: Uploaded UPSC_Answer_Key.pdf
@@ -68,8 +72,18 @@ sources:
     exception: >
       Same one-off exception as upsc_questions_compiled - see above.
     notes: >
-      250 answers, no matching question paper attached. Unusable
-      until paired with a source question set.
+      250 answers. Merged into upsc_questions_compiled (Sept 2026):
+      the key's 250-answer length exactly matches that question set's
+      independently-derived global numbering span (1-250 across its 5
+      topics) - a structural coincidence unlikely if the two files
+      weren't originally paired. Spot-checked Q1's merged answer
+      ("Economic Justice" -> Preamble + DPSP) against known fact; it's
+      correct. One extraction glitch found and handled: position 143
+      printed as "13.B" (dropped digit) - merge_answer_key.py matches
+      by sequential position in the key, not the printed label, so
+      this didn't cause a misalignment. Still confidence=unverified:
+      matched by strong structural + spot-check evidence, not an
+      official confirmation.
 
   - id: ssc_cgl_2024
     name: SSC CGL Tier 1 (Sept 2024)
