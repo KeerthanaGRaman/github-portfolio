@@ -1,0 +1,164 @@
+# NCERT textbook registry for UPSC-relevant subjects (English medium),
+# classes 6-12. Codes reverse-engineered from the book-selector JS on
+# https://ncert.nic.in/textbook.php (the "tbook" dropdown values).
+#
+# PDF URL pattern for chapter N of book code <code>:
+#   https://ncert.nic.in/textbook/pdf/<code><NN>.pdf   (NN = 01, 02, ...)
+#
+# `chapters` is the known chapter count (download script stops early on
+# a 404 regardless, so an overestimate is harmless).
+
+books:
+  # --- Class 6 ---
+  - code: fees1
+    title: "Exploring Society: India and Beyond (Class 6)"
+    class: 6
+    topics: [history, geography, polity, economy]
+    chapters: 15
+
+  # --- Class 7 ---
+  - code: gees1
+    title: "Exploring Society: India and Beyond, Part I (Class 7)"
+    class: 7
+    topics: [history, geography, polity, economy]
+    chapters: 13
+  - code: gees2
+    title: "Exploring Society: India and Beyond, Part II (Class 7)"
+    class: 7
+    topics: [history, geography, polity, economy]
+    chapters: 9
+
+  # --- Class 8 ---
+  - code: hees1
+    title: "Exploring Society: India and Beyond, Part I (Class 8)"
+    class: 8
+    topics: [history, geography, polity, economy]
+    chapters: 8
+  - code: hees2
+    title: "Exploring Society: India and Beyond, Part II (Class 8)"
+    class: 8
+    topics: [history, geography, polity, economy]
+    chapters: 9
+
+  # --- Class 9 ---
+  - code: iest1
+    title: "Understanding Society: India and Beyond, Part I (Class 9)"
+    class: 9
+    topics: [history, geography, polity, economy]
+    chapters: 10
+
+  # --- Class 10 ---
+  - code: jess1
+    title: "Contemporary India (Geography, Class 10)"
+    class: 10
+    topics: [geography]
+    chapters: 8
+  - code: jess2
+    title: "Understanding Economic Development (Class 10)"
+    class: 10
+    topics: [economy]
+    chapters: 6
+  - code: jess3
+    title: "India and the Contemporary World-II (History, Class 10)"
+    class: 10
+    topics: [history]
+    chapters: 6
+  - code: jess4
+    title: "Democratic Politics (Class 10)"
+    class: 10
+    topics: [polity]
+    chapters: 6
+
+  # --- Class 11 ---
+  - code: keec1
+    title: "Indian Economic Development (Class 11)"
+    class: 11
+    topics: [economy]
+    chapters: 9
+  - code: kest1
+    title: "Statistics for Economics (Class 11)"
+    class: 11
+    topics: [economy, quant]
+    chapters: 9
+  - code: kegy1
+    title: "India: Physical Environment (Class 11)"
+    class: 11
+    topics: [geography]
+    chapters: 7
+  - code: kegy2
+    title: "Fundamentals of Physical Geography (Class 11)"
+    class: 11
+    topics: [geography]
+    chapters: 15
+  - code: kegy3
+    title: "Practical Work in Geography (Class 11)"
+    class: 11
+    topics: [geography]
+    chapters: 7
+  - code: keps1
+    title: "Political Theory (Class 11)"
+    class: 11
+    topics: [polity]
+    chapters: 9
+  - code: keps2
+    title: "Indian Constitution at Work (Class 11)"
+    class: 11
+    topics: [polity, constitution]
+    chapters: 11
+  - code: kehs1
+    title: "Themes in World History (Class 11)"
+    class: 11
+    topics: [history_world]
+    chapters: 8
+
+  # --- Class 12 ---
+  - code: lehs1
+    title: "Themes in Indian History, Part I (Class 12)"
+    class: 12
+    topics: [history]
+    chapters: 5
+  - code: lehs2
+    title: "Themes in Indian History, Part II (Class 12)"
+    class: 12
+    topics: [history]
+    chapters: 5
+  - code: lehs3
+    title: "Themes in Indian History, Part III (Class 12)"
+    class: 12
+    topics: [history]
+    chapters: 5
+  - code: legy1
+    title: "Fundamentals of Human Geography (Class 12)"
+    class: 12
+    topics: [geography]
+    chapters: 9
+  - code: legy2
+    title: "India: People and Economy (Class 12)"
+    class: 12
+    topics: [geography, economy]
+    chapters: 10
+  - code: legy3
+    title: "Practical Work in Geography, Part II (Class 12)"
+    class: 12
+    topics: [geography]
+    chapters: 5
+  - code: leps1
+    title: "Contemporary World Politics (Class 12)"
+    class: 12
+    topics: [international_relations]
+    chapters: 8
+  - code: leps2
+    title: "Politics in India Since Independence (Class 12)"
+    class: 12
+    topics: [polity, governance]
+    chapters: 9
+  - code: leec1
+    title: "Introductory Macroeconomics (Class 12)"
+    class: 12
+    topics: [economy]
+    chapters: 7
+  - code: leec2
+    title: "Introductory Microeconomics (Class 12)"
+    class: 12
+    topics: [economy]
+    chapters: 6

@@ -1,4 +1,6 @@
 __pycache__/
 *.pyc
 .venv/
-data/raw/**/*.pdf
+# Raw downloaded/extracted source material never gets committed -
+# only the compiled, tagged corpus in data/processed/ does.
+data/raw/
