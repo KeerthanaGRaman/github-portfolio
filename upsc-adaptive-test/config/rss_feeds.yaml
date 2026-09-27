@@ -21,6 +21,5 @@ feeds:
       (server-side, not our proxy). fetch_rss.py retries with backoff.
 
 # PRS India has no RSS feed (checked /feed, /rss.xml, /rss, /feed.xml,
-# /bill-track/rss - all 404 as of Sept 2026). Bill-tracking content
-# would need a scraper against their bill-track listing pages instead -
-# left as a follow-up, not wired into fetch_rss.py.
+# /bill-track/rss - all 404 as of Sept 2026). Bill-tracking content is
+# scraped instead via scripts/ingest/scrape_prs.py - see sources.yaml.

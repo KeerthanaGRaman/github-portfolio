@@ -31,7 +31,15 @@ sources:
     url: https://prsindia.org
     type: [current_affairs, policy_analysis]
     confidence: verified
-    ingestion: rss
+    ingestion: scrape
+    notes: >
+      No RSS feed exists (checked /feed, /rss.xml, /rss, /feed.xml,
+      /bill-track/rss - all 404). Scraped instead from the public
+      /billtrack listing (975 bills, no pagination) via
+      scripts/ingest/scrape_prs.py. robots.txt only disallows Drupal
+      admin/system paths; /billtrack is unrestricted. Respects the
+      site's Crawl-delay: 10. Only title/status/link stored, not PRS's
+      own bill-summary text (copyright).
 
   - id: upsc_questions_compiled
     name: Uploaded UPSC_Questions.pdf (topic-wise compilation)

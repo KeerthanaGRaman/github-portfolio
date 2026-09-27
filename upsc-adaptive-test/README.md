@@ -19,6 +19,7 @@ data/
 scripts/
   ingest/fetch_ncert.py   downloads + extracts NCERT chapter PDFs -> text
   ingest/fetch_rss.py     pulls current-affairs RSS feeds -> jsonl
+  ingest/scrape_prs.py    scrapes PRS's Bills Track listing (no RSS exists) -> jsonl
   extract/pdf_to_text.py  PDF -> plain text (pdftotext)
   extract/parse_questions.py    text -> structured MCQ JSON, tagged by topic
   extract/merge_answer_key.py   merge a bare answer key into parsed questions
@@ -55,6 +56,11 @@ copyright + reliability).
 4. `fetch_rss.py` — pull of PIB current-affairs feed into
    `data/processed/current_affairs/feed_items.jsonl` (dedup by link,
    retries on PIB's flaky TLS resets).
+5. `scrape_prs.py` — scrapes PRS's public `/billtrack` listing (no RSS
+   feed exists there) into `data/processed/current_affairs/prs_bills.jsonl`
+   (deduped by link, re-run updates a bill's status in place). Respects
+   `robots.txt`'s `Crawl-delay: 10`; stores only title/status/link, not
+   PRS's own bill-summary text.
 
 ## Known blockers
 
@@ -62,9 +68,6 @@ copyright + reliability).
   resets the TLS connection for every request (a server-side block on
   this IP range, not a local network-policy issue). Official UPSC
   syllabus/papers/answer-keys still need to come in via manual upload.
-- **PRS India** has no RSS feed (`/feed`, `/rss.xml`, `/rss`,
-  `/feed.xml`, `/bill-track/rss` all 404 as of Sept 2026). Bill-track
-  content would need a page scraper instead — not yet built.
 
 ## Next steps
 
@@ -73,6 +76,5 @@ copyright + reliability).
   question-parsing pipeline.
 - Cross-check `UPSC_Questions.pdf` (unverified) against official papers
   to promote confirmed matches to `verified`.
-- Build a PRS bill-track scraper, or find an alternative feed.
-- Wire `fetch_rss.py` (and eventually `fetch_ncert.py`, one-off) into a
-  scheduled job (cron / GitHub Actions).
+- Wire `fetch_rss.py` and `scrape_prs.py` (and eventually
+  `fetch_ncert.py`, one-off) into a scheduled job (cron / GitHub Actions).
