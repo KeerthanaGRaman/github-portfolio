@@ -62,6 +62,16 @@ sources:
       that entry for why the match is trustworthy. No year/source
       citation per question, so still bonus practice pool only, not
       promoted to verified.
+    extraction_validation: >
+      Vision-model spot-check (Sept 2026) against the actual page
+      images for Q1-3 and Q124-126 (the latter including a genuine
+      two-column "match the list" table): 100% match to
+      parse_questions.py's output, no discrepancies found. Unlike the
+      NCERT corpus's line-scattered diagrams, this PDF's tables are
+      row-aligned (each row's columns share one physical text line),
+      which pdftotext -layout reads correctly - the failure mode found
+      in NCERT only affects content with no line-based structure at all
+      (e.g. a circular graphic), not two-column layouts in general.
 
   - id: upsc_answer_key_orphan
     name: Uploaded UPSC_Answer_Key.pdf
