@@ -46,17 +46,27 @@ sources:
     local_path: data/raw/unverified/UPSC_Questions.pdf
     type: [question_paper]
     confidence: unverified
+    coaching_origin: "Ganesh's IAS Study Centre (GIAS)"
+    exception: >
+      Watermark identifies this as coaching-institute material (GIAS),
+      which config's excluded_sources policy would normally exclude.
+      Explicit, one-off exception approved by the user (Sept 2026) for
+      this specific file only - does not open the door to other
+      coaching sources. Stays confidence=unverified; must still be
+      cross-checked against upsc_official before being trusted as fact.
     notes: >
       595 MCQs across Polity/Economy/Geography/Environment/History.
-      No year/source citation per question. Must be cross-checked
-      against upsc_official before being marked verified. Use as
-      bonus practice pool only.
+      No year/source citation per question. Use as bonus practice
+      pool only.
 
   - id: upsc_answer_key_orphan
     name: Uploaded UPSC_Answer_Key.pdf
     local_path: data/raw/unverified/UPSC_Answer_Key.pdf
     type: [answer_key]
     confidence: unverified
+    coaching_origin: "Ganesh's IAS Study Centre (GIAS)"
+    exception: >
+      Same one-off exception as upsc_questions_compiled - see above.
     notes: >
       250 answers, no matching question paper attached. Unusable
       until paired with a source question set.
@@ -71,3 +81,7 @@ sources:
 excluded_sources:
   - Coaching material (Vision IAS, Drishti IAS, etc.) — copyright + no
     reliability guarantee. Not ingested.
+    Exception: upsc_questions_compiled and upsc_answer_key_orphan
+    (Ganesh's IAS / GIAS) were explicitly approved by the user as a
+    one-off (Sept 2026) - see their per-source `exception` notes above.
+    This does not generalize to other coaching sources.
